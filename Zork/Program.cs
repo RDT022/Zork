@@ -20,7 +20,7 @@ namespace Zork
             }
             else
             {
-                Console.WriteLine("Unrecognized Command.");
+                Console.WriteLine($"Unrecognized Command: {InputString}");
             }
         }
     }
