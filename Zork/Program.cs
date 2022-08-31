@@ -23,11 +23,14 @@ namespace Zork
                     case Commands.QUIT:
                         outputString = "Thank you for playing!";
                         break;
-                    case Commands.UNKNOWN:
-                        outputString = "Unknown command.";
+                    case Commands.NORTH:
+                    case Commands.SOUTH:
+                    case Commands.WEST:
+                    case Commands.EAST:
+                        outputString = $"You moved {command}.";
                         break;
                     default:
-                        outputString = $"You moved {command}.";
+                        outputString = "Unknown command.";
                         break;
                 }
 
