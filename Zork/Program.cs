@@ -5,15 +5,20 @@ namespace Zork
 {
     class Program
     {
-        private static string[] _rooms = { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
+        private static readonly string[,] _rooms = {
+            { "Rocky Trail", "South of House", "Canyon View"},
+            { "Forest", "West of House", "Behind House"},
+            { "Dense Woods", "North of House", "Clearing"}
+        };
         private static byte _roomIndex = 1;
+        private static byte _vertIndex = 1;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
-                Console.Write($"{_rooms[_roomIndex]}\n> ");
+                Console.Write($"{_rooms[_roomIndex,_vertIndex]}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
@@ -57,11 +62,15 @@ namespace Zork
             bool didMove;
             switch (command)
             {
-                case Commands.NORTH:
-                case Commands.SOUTH:
-                    didMove = false;
+                case Commands.NORTH when _vertIndex < _rooms.GetLength(0) -1:
+                    _vertIndex++;
+                    didMove = true;
                     break;
-                case Commands.EAST when _roomIndex < _rooms.Length - 1:
+                case Commands.SOUTH when _vertIndex > 0:
+                    _vertIndex--;
+                    didMove = true;
+                    break;
+                case Commands.EAST when _roomIndex < _rooms.GetLength(1) - 1:
                     _roomIndex++;
                     didMove = true;
                     break;
