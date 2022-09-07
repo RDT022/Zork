@@ -5,16 +5,15 @@ namespace Zork
 {
     class Program
     {
-        private static string[] Rooms = new string[] { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
-        private static byte RoomIndex = 1;
+        private static string[] _rooms = { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
+        private static byte _roomIndex = 1;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
-                Console.WriteLine(Rooms[RoomIndex]);
-                Console.Write("> ");
+                Console.Write($"{_rooms[_roomIndex]}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
@@ -28,11 +27,9 @@ namespace Zork
                         break;
                     case Commands.NORTH:
                     case Commands.SOUTH:
-                        outputString = "The way is shut!";
-                        break;
                     case Commands.WEST:
                     case Commands.EAST:
-                        if(Move(command))
+                        if (Move(command))
                         {
                             outputString = $"You moved {command}.";
                         }
@@ -57,20 +54,26 @@ namespace Zork
 
         private static bool Move(Commands command)
         {
-            if(command == Commands.WEST && RoomIndex - 1 >= 0)
+            bool didMove;
+            switch (command)
             {
-                RoomIndex--;
-                return true;
+                case Commands.NORTH:
+                case Commands.SOUTH:
+                    didMove = false;
+                    break;
+                case Commands.EAST when _roomIndex < _rooms.Length - 1:
+                    _roomIndex++;
+                    didMove = true;
+                    break;
+                case Commands.WEST when _roomIndex > 0:
+                    _roomIndex--;
+                    didMove = true;
+                    break;
+                default:
+                    didMove = false;
+                    break;
             }
-            else if(command == Commands.EAST && RoomIndex + 1 < Rooms.Length)
-            {
-                RoomIndex++;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return didMove;
         }
     }
 }
