@@ -5,20 +5,21 @@ namespace Zork
 {
     class Program
     {
-        private static readonly string[,] _rooms = {
-            { "Rocky Trail", "South of House", "Canyon View"},
-            { "Forest", "West of House", "Behind House"},
-            { "Dense Woods", "North of House", "Clearing"}
-        };
-        private static byte _roomIndex = 1;
-        private static byte _vertIndex = 1;
+        private static string CurrentRoom
+        {
+            get
+            {
+                return _rooms[_location.Row, _location.Column];
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
-                Console.Write($"{_rooms[_roomIndex,_vertIndex]}\n> ");
+                Console.Write($"{CurrentRoom}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
@@ -62,20 +63,20 @@ namespace Zork
             bool didMove;
             switch (command)
             {
-                case Commands.NORTH when _vertIndex < _rooms.GetLength(0) -1:
-                    _vertIndex++;
+                case Commands.NORTH when _location.Row < _rooms.GetLength(0) - 1:
+                    _location.Row++;
                     didMove = true;
                     break;
-                case Commands.SOUTH when _vertIndex > 0:
-                    _vertIndex--;
+                case Commands.SOUTH when _location.Row > 0:
+                    _location.Row--;
                     didMove = true;
                     break;
-                case Commands.EAST when _roomIndex < _rooms.GetLength(1) - 1:
-                    _roomIndex++;
+                case Commands.EAST when _location.Column < _rooms.GetLength(1) - 1:
+                    _location.Column++;
                     didMove = true;
                     break;
-                case Commands.WEST when _roomIndex > 0:
-                    _roomIndex--;
+                case Commands.WEST when _location.Column > 0:
+                    _location.Column--;
                     didMove = true;
                     break;
                 default:
@@ -84,5 +85,12 @@ namespace Zork
             }
             return didMove;
         }
+
+        private static readonly string[,] _rooms = {
+            { "Rocky Trail", "South of House", "Canyon View"},
+            { "Forest", "West of House", "Behind House"},
+            { "Dense Woods", "North of House", "Clearing"}
+        };
+        private static (int Row, int Column) _location = (1, 1);
     }
 }
