@@ -12,7 +12,7 @@ namespace Zork
 
         public void Run()
         {
-            InitializeRoomDescriptions("Rooms.txt");
+            InitializeRoomDescriptions(@"Content\Rooms.txt");
 
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
@@ -87,14 +87,14 @@ namespace Zork
 
         private static readonly Dictionary<string, Room> _roomMap;
 
-        static Game()
-        {
-            _roomMap = new Dictionary<string, Room>();
-            foreach (Room room in World.Rooms)
-            {
-                _roomMap[room.Name] = room;
-            }
-        }
+        //static Game()
+        //{
+        //    _roomMap = new Dictionary<string, Room>();
+        //    foreach (Room room in World.Rooms)
+        //    {
+        //        _roomMap[room.Name] = room;
+        //    }
+        //}
 
         private enum Fields
         {
