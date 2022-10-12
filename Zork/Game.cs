@@ -11,9 +11,6 @@ namespace Zork
         [JsonIgnore]
         public Player Player { get; private set; }
 
-        [JsonIgnore]
-        private bool IsRunning { get; set; }
-
         public Game(World world, Player player)
         {
            World = world;
@@ -58,11 +55,19 @@ namespace Zork
                             outputString = "The way is shut!";
                         }
                         break;
+                    case Commands.SCORE:
+                        outputString = $"Score: {Player.Score}\nMoves: {Player.Moves}";
+                        break;
+                    case Commands.REWARD:
+                        outputString = "Score increased.";
+                        Player.Score++;
+                        break;
                     default:
                         outputString = "Unknown command.";
                         break;
                 }
 
+                Player.Moves++;
                 Console.WriteLine(outputString);
             }
         }
