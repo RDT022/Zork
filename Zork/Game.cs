@@ -37,8 +37,10 @@ namespace Zork
                 {
                     case Commands.LOOK:
                         outputString = Player.Location.Description;
+                        Player.Moves++;
                         break;
                     case Commands.QUIT:
+                        //Not including a Move incrementation here because the game quits right afterwards making it redundant.
                         outputString = "Thank you for playing!";
                         break;
                     case Commands.NORTH:
@@ -54,20 +56,22 @@ namespace Zork
                         {
                             outputString = "The way is shut!";
                         }
+                        Player.Moves++;
                         break;
                     case Commands.SCORE:
-                        outputString = $"Score: {Player.Score}\nMoves: {Player.Moves}";
+                        outputString = $"Your score would be {Player.Score} in {Player.Moves} move(s).";
+                        Player.Moves++;
                         break;
                     case Commands.REWARD:
                         outputString = "Score increased.";
                         Player.Score++;
+                        Player.Moves++;
                         break;
                     default:
                         outputString = "Unknown command.";
                         break;
                 }
 
-                Player.Moves++;
                 Console.WriteLine(outputString);
             }
         }
