@@ -27,6 +27,8 @@ namespace Zork
             }
         }
 
+        public List<Item> Inventory { get; }
+
         public Player(World world, string startingLocation)
         {
             World = world;
