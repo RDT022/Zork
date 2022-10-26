@@ -8,12 +8,15 @@ namespace Zork
     {
         public string Name { get; }
 
-        public string Description { get; }
+        public string InvDescription { get; }
 
-        public Item(string name, string description)
+        public string LookDescription { get; }
+
+        public Item(string name, string invdescription, string lookdescription)
         {
             Name = name;
-            Description = description;
+            InvDescription = invdescription;
+            LookDescription = lookdescription;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Zork
 
         public List<Item> Inventory { get; private set; }
 
-        private string[] InventoryNames { get; }
+        private string[] InventoryNames { get; set; }
 
         public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames)
         {
@@ -65,6 +65,7 @@ namespace Zork
                     Neighbors.Add(neighborName.Key, room);
                 }
             }
+            NeighborNames = null;
         }
 
         public void UpdateInventory(World world)
@@ -74,7 +75,8 @@ namespace Zork
             {
                 Inventory.Add(world.ItemsByName[inventoryName]);
             }
-
+            InventoryNames = null;
         }
+
     }
 }
