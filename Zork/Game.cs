@@ -53,7 +53,6 @@ namespace Zork
                         subject = commandTokens[1];
                         break;
                     default:
-                        command = Commands.UNKNOWN;
                         break;
                 }
                 Item thing = null;
