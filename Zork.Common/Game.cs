@@ -2,10 +2,8 @@
 using System.IO;
 using System;
 using System.Text;
-using System.ComponentModel;
-using System.Reflection.Metadata.Ecma335;
 
-namespace Zork
+namespace Zork.Common
 {
     public class Game
     {
@@ -14,29 +12,33 @@ namespace Zork
         [JsonIgnore]
         public Player Player { get; private set; }
 
+        public IOutputService Output { get; private set; }
+
         public Game(World world, Player player)
         {
            World = world;
            Player = player;
         }
 
-        public void Run()
+        public void Run(IOutputService output)
         {
+            Output = output;
+
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
-                Console.WriteLine(Player.Location);
+                Output.WriteLine(Player.Location);
                 if (previousRoom != Player.Location)
                 {
-                    Console.WriteLine(Player.Location.Description);
+                    Output.WriteLine(Player.Location.Description);
                     foreach(Item item in Player.Location.Inventory)
                     {
-                        Console.WriteLine(item.LookDescription);
+                        Output.WriteLine(item.LookDescription);
                     }
                     previousRoom = Player.Location;
                 }
-                Console.Write("> ");
+                Output.Write("> ");
                 string inputString = Console.ReadLine().Trim();
                 const char separator = ' ';
                 string[] commandTokens = inputString.Split(separator);
@@ -160,7 +162,7 @@ namespace Zork
                     Player.Moves++;
                 }
 
-                Console.WriteLine(outputString);
+                Output.WriteLine(outputString);
             }
         }
 
