@@ -8,13 +8,25 @@ namespace Zork.Cli
         static void Main(string[] args)
         {
             var output = new ConsoleOutputService();
+            var input = new ConsoleInputService();
 
             const string defaultGameFilename = @"Content\Rooms.json";
             string gameFilename = (args.Length > 0 ? args[(int)CommandLineArguments.GameFilename] : defaultGameFilename);
 
             Game game = Game.Load(gameFilename);
             Console.WriteLine("Welcome to Zork!");
-            game.Run(output);
+            game.Run(input, output);
+
+            while(game.IsRunning)
+            {
+                game.Output.Write("> ");
+                input.ProcessInput();
+
+                if(game.IsRunning)
+                {
+                    game.Output.WriteLine(game.Player.Location);
+                }
+            }
         }
 
         private enum CommandLineArguments

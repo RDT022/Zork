@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Zork.Common
 {
     public class Player
     {
+        public event EventHandler<int> MovesChanged;
+
         public World World { get; }
 
         [JsonIgnore]
@@ -12,7 +15,21 @@ namespace Zork.Common
 
         public int Score { get; set; }
 
-        public int Moves { get; set; }
+        public int Moves
+        {
+            get
+            {
+                return _moves;
+            }
+            set
+            {
+                if(_moves != value)
+                {
+                    _moves = value;
+                    MovesChanged?.Invoke(this, _moves);
+                }
+            }
+        }
 
         [JsonIgnore]
         public string LocationName
@@ -82,5 +99,7 @@ namespace Zork.Common
                 return $"You dropped the {item.Name}\n";
             }
         }
+
+        private int _moves;
     }
 }
