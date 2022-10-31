@@ -13,7 +13,7 @@ namespace Zork.Common
         public Item[] Items { get; }
 
         [JsonIgnore]
-        public IReadOnlyDictionary<string, Room> RoomsByName => mRoomsByName;
+        public Dictionary<string, Room> RoomsByName { get; }
 
         [JsonIgnore]
         public Dictionary<string, Item> ItemsByName { get; }
@@ -22,6 +22,12 @@ namespace Zork.Common
         {
             Rooms = rooms;
             Items = items;
+
+            RoomsByName = new Dictionary<string, Room>(StringComparer.OrdinalIgnoreCase);
+            foreach (Room room in Rooms)
+            {
+                RoomsByName.Add(room.Name, room);
+            }
 
             ItemsByName = new Dictionary<string, Item>(StringComparer.OrdinalIgnoreCase);
             foreach(Item item in Items)
@@ -35,8 +41,6 @@ namespace Zork.Common
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            mRoomsByName = Rooms.ToDictionary(room => room.Name, room => room);
-
             foreach (Room room in Rooms)
             {
                 room.UpdateNeighbors(this);
@@ -47,6 +51,5 @@ namespace Zork.Common
         [JsonProperty]
         private string StartingLocation { get; set; }
 
-        private Dictionary<string, Room> mRoomsByName;
     }
 }

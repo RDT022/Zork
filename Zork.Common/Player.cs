@@ -46,5 +46,41 @@ namespace Zork.Common
 
             return isValidMove;
         }
+
+        public string AddToInventory(Item item)
+        {
+            if(Location.Inventory.Count == 0)
+            {
+                return "There is nothing to take.\n";
+            }
+            else if(item == null || !Location.Inventory.Contains(item))
+            {
+                return "You can see no such thing.\n";
+            }
+            else
+            {
+                Inventory.Add(item);
+                Location.Inventory.Remove(item);
+                return $"You took the {item.Name}\n";
+            }
+        }
+
+        public string RemoveFromInventory(Item item)
+        {
+            if (Inventory.Count == 0)
+            {
+                return "You are not carrying anything.\n";
+            }
+            else if (item == null || !Inventory.Contains(item))
+            {
+                return "You are carrying no such thing.\n";
+            }
+            else
+            {
+                Location.Inventory.Add(item);
+                Inventory.Remove(item);
+                return $"You dropped the {item.Name}\n";
+            }
+        }
     }
 }

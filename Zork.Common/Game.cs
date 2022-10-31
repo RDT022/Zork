@@ -113,43 +113,23 @@ namespace Zork.Common
                         }
                         break;
                     case Commands.TAKE:
-                        if (Player.Location.Inventory.Count == 0)
-                        {
-                            outputString = "There is nothing to take.\n";
-                        }
-                        else if (subject == null)
+                        if (subject == null)
                         {
                             outputString = "Please specify an item to take.\n";
                         }
-                        else if (thing == null || !Player.Location.Inventory.Contains(thing))
-                        {
-                            outputString = "I can see no such thing.\n";
-                        }
                         else
                         {
-                            Player.Location.Inventory.Remove(thing);
-                            Player.Inventory.Add(thing);
-                            outputString = $"You took the {thing.Name}\n";
+                            outputString = Player.AddToInventory(thing);
                         }
                         break;
                     case Commands.DROP:
-                        if (Player.Inventory.Count == 0)
-                        {
-                            outputString = "You are not carrying anything.\n";
-                        }
-                        else if (subject == null)
+                        if (subject == null)
                         {
                             outputString = "Please specify an item to drop.\n";
                         }
-                        else if (thing == null || !Player.Inventory.Contains(thing))
-                        {
-                            outputString = "You are carrying no such thing.\n";
-                        }
                         else
                         {
-                            Player.Inventory.Remove(thing);
-                            Player.Location.Inventory.Add(thing);
-                            outputString = $"You dropped the {thing.Name}\n";
+                            outputString = Player.RemoveFromInventory(thing);
                         }
                         break;
                     default:
