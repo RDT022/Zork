@@ -17,21 +17,31 @@ namespace Zork.Cli
             Console.WriteLine("Welcome to Zork!");
             game.Run(input, output);
 
-            while(game.IsRunning)
+            while (game.IsRunning)
             {
-                game.Output.Write("> ");
-                input.ProcessInput();
-
-                if(game.IsRunning)
+                if (game.IsRunning)
                 {
                     game.Output.WriteLine(game.Player.Location);
+                    if (game.PreviousRoom != game.Player.Location)
+                    {
+                        game.Output.WriteLine(game.Player.Location.Description);
+                        foreach (Item item in game.Player.Location.Inventory)
+                        {
+                            game.Output.WriteLine(item.LookDescription);
+                        }
+                    }
                 }
+                game.Output.Write("> ");
+                input.ProcessInput();
             }
-        }
+            
 
+        }
         private enum CommandLineArguments
         {
             GameFilename = 0
         }
     }
+
 }
+

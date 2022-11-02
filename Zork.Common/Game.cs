@@ -18,6 +18,8 @@ namespace Zork.Common
 
         public bool IsRunning { get; private set; }
 
+        public Room PreviousRoom { get; private set; }
+
         public Game(World world, Player player)
         {
             World = world;
@@ -38,7 +40,7 @@ namespace Zork.Common
         private void Input_InputReceived(object sender, string inputString)
         {
             Commands command = Commands.UNKNOWN;
-            Room previousRoom = Player.Location;
+            PreviousRoom = Player.Location;
             const char separator = ' ';
             string[] commandTokens = inputString.Split(separator);
             string subject = null;
@@ -105,6 +107,7 @@ namespace Zork.Common
                     }
                     else
                     {
+                        sb.Append("You are carrying:\n");
                         foreach (Item item in Player.Inventory)
                         {
                             sb.Append($"{item.InvDescription}\n");
@@ -144,14 +147,6 @@ namespace Zork.Common
 
             Output.WriteLine(outputString);
 
-            if (previousRoom != Player.Location)
-            {
-                Output.WriteLine(Player.Location.Description);
-                foreach (Item item in Player.Location.Inventory)
-                {
-                    Output.WriteLine(item.LookDescription);
-                }
-            }
         }
 
         public static Game Load(string filename)
