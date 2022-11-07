@@ -15,6 +15,8 @@ namespace Zork.Common
 
         public int Score { get; set; }
 
+        public List<Item> Inventory { get; }
+
         public int Moves
         {
             get
@@ -43,8 +45,6 @@ namespace Zork.Common
                 Location = World?.RoomsByName.GetValueOrDefault(value);
             }
         }
-
-        public List<Item> Inventory { get; }
 
         public Player(World world, string startingLocation)
         {
