@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System.IO;
 using Zork.Common;
 
 namespace Zork.Cli
@@ -13,24 +14,11 @@ namespace Zork.Cli
             const string defaultGameFilename = @"Content\Rooms.json";
             string gameFilename = (args.Length > 0 ? args[(int)CommandLineArguments.GameFilename] : defaultGameFilename);
 
-            Game game = Game.Load(gameFilename);
-            Console.WriteLine("Welcome to Zork!");
+            Game game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(gameFilename));
             game.Run(input, output);
 
             while (game.IsRunning)
             {
-                if (game.IsRunning)
-                {
-                    game.Output.WriteLine(game.Player.Location);
-                    if (game.PreviousRoom != game.Player.Location)
-                    {
-                        game.Output.WriteLine(game.Player.Location.Description);
-                        foreach (Item item in game.Player.Location.Inventory)
-                        {
-                            game.Output.WriteLine(item.LookDescription);
-                        }
-                    }
-                }
                 game.Output.Write("> ");
                 input.ProcessInput();
             }

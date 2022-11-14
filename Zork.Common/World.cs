@@ -36,8 +36,6 @@ namespace Zork.Common
             }
         }
 
-        public Player SpawnPlayer() => new Player(this, StartingLocation);
-
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {

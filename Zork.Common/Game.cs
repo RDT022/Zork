@@ -2,6 +2,7 @@
 using System.IO;
 using System;
 using System.Text;
+using System.Linq;
 
 namespace Zork.Common
 {
@@ -12,18 +13,21 @@ namespace Zork.Common
         [JsonIgnore]
         public Player Player { get; private set; }
 
+        [JsonIgnore]
         public IOutputService Output { get; private set; }
 
+        [JsonIgnore]
         public IInputService Input { get; private set; }
 
+        [JsonIgnore]
         public bool IsRunning { get; private set; }
 
         public Room PreviousRoom { get; private set; }
 
-        public Game(World world, Player player)
+        public Game(World world, string startingLocation)
         {
             World = world;
-            Player = player;
+            Player = new Player(World, startingLocation);
         }
 
         public void Run(IInputService input, IOutputService output)
@@ -33,8 +37,9 @@ namespace Zork.Common
 
             IsRunning = true;
             Input.InputReceived += Input_InputReceived;
-
-            
+            Output.WriteLine("Welcome to Zork!");
+            Output.WriteLine($"{Player.Location}");
+            Look();
         }
 
         private void Input_InputReceived(object sender, string inputString)
@@ -63,80 +68,65 @@ namespace Zork.Common
             {
                 thing = i;
             }
-            string outputString;
-            StringBuilder sb = new StringBuilder();
             switch (command)
             {
                 case Commands.LOOK:
-                    sb.Append($"{Player.Location.Description}\n");
-                    foreach (Item item in Player.Location.Inventory)
-                    {
-                        sb.Append($"{item.LookDescription}\n");
-                    }
-                    outputString = sb.ToString();
+                    Look();
                     break;
                 case Commands.QUIT:
-                    outputString = "Thank you for playing!";
+                    Output.WriteLine("Thank you for playing!");
                     IsRunning = false;
                     break;
                 case Commands.NORTH:
                 case Commands.SOUTH:
                 case Commands.WEST:
                 case Commands.EAST:
-                    Directions direction = Enum.Parse<Directions>(command.ToString(), true);
-                    if (Player.Move(direction))
-                    {
-                        outputString = $"You moved {command}.\n";
-                    }
-                    else
-                    {
-                        outputString = "The way is shut!\n";
-                    }
+                    Directions direction = (Directions)command;
+                    Output.WriteLine(Player.Move(direction) ? $"You moved {direction}.\n" : "The way is shut!\n");
                     break;
                 case Commands.SCORE:
-                    outputString = $"Your score would be {Player.Score} in {Player.Moves} move(s).\n";
+                    Output.WriteLine($"Your score would be {Player.Score} in {Player.Moves} move(s).\n");
                     break;
                 case Commands.REWARD:
-                    outputString = "Score increased.\n";
+                    Output.WriteLine("Score increased.\n");
                     Player.Score++;
                     break;
                 case Commands.INVENTORY:
                     if (Player.Inventory.Count == 0)
                     {
-                        outputString = "You are empty handed.\n";
+                        Output.WriteLine("You are empty handed.\n");
                     }
                     else
                     {
-                        sb.Append("You are carrying:\n");
+                        Output.WriteLine("You are carrying:");
                         foreach (Item item in Player.Inventory)
                         {
-                            sb.Append($"{item.InvDescription}\n");
+                            Output.WriteLine($"{item.InvDescription}\n");
                         }
-                        outputString = sb.ToString();
                     }
                     break;
                 case Commands.TAKE:
                     if (subject == null)
                     {
-                        outputString = "Please specify an item to take.\n";
+                        Output.WriteLine("Please specify an item to take.\n");
                     }
                     else
                     {
-                        outputString = Player.AddToInventory(thing);
+                        Output.WriteLine(Player.AddToInventory(thing));
                     }
                     break;
                 case Commands.DROP:
                     if (subject == null)
                     {
-                        outputString = "Please specify an item to drop.\n";
+                        Output.WriteLine("Please specify an item to drop.\n");
                     }
                     else
                     {
-                        outputString = Player.RemoveFromInventory(thing);
+                        Output.WriteLine(Player.RemoveFromInventory(thing));
                     }
                     break;
                 default:
-                    outputString = "Unknown command.\n";
+                    Output.WriteLine("Unknown command.\n");
                     break;
             }
 
@@ -145,20 +135,27 @@ namespace Zork.Common
                 Player.Moves++;
             }
 
-            Output.WriteLine(outputString);
+            Output.WriteLine($"{Player.Location}");
+            if (ReferenceEquals(PreviousRoom, Player.Location) == false)
+            {
+                Look();
+            }
 
         }
 
-        public static Game Load(string filename)
-        {
-            Game game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(filename));
-            game.Player = game.World.SpawnPlayer();
-            return game;
-        }
 
         private static Commands ToCommand(string commandString)
         {
             return Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
+        }
+
+        private void Look()
+        {
+            Output.WriteLine(Player.Location.Description);
+            foreach(Item item in Player.Location.Inventory)
+            {
+                Output.WriteLine(item.LookDescription);
+            }
         }
     }
 }

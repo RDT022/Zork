@@ -18,5 +18,7 @@ namespace Zork.Common
             InvDescription = invdescription;
             LookDescription = lookdescription;
         }
+
+        public override string ToString() => Name;
     }
 }
