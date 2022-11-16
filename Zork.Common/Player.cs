@@ -8,10 +8,20 @@ namespace Zork.Common
     {
         public event EventHandler<int> MovesChanged;
 
+        public event EventHandler<Room> LocationChanged;
+
         [JsonIgnore]
-        public Room Location { 
+        public Room Location 
+        { 
             get => _location; 
-            set => _location = value; 
+            set
+            {
+                if(_location != value)
+                {
+                    _location = value;
+                    LocationChanged?.Invoke(this, Location);
+                }
+            }
         }
 
         public int Score { get; set; }
