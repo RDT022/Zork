@@ -10,6 +10,8 @@ namespace Zork.Common
 
         public event EventHandler<Room> LocationChanged;
 
+        public event EventHandler<int> ScoreChanged;
+
         [JsonIgnore]
         public Room Location 
         { 
@@ -24,7 +26,21 @@ namespace Zork.Common
             }
         }
 
-        public int Score { get; set; }
+        public int Score 
+        {
+            get
+            {
+                return _score;
+            }
+            set
+            {
+                if (_score != value)
+                {
+                    _score = value;
+                    ScoreChanged?.Invoke(this, _score);
+                }
+            }
+        }
 
         public List<Item> Inventory { get; }
 
@@ -102,6 +118,7 @@ namespace Zork.Common
         }
 
         private int _moves;
+        private int _score;
 
         private readonly World _world;
         private Room _location;

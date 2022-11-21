@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System.IO;
 using System;
-using System.Text;
-using System.Linq;
-
 namespace Zork.Common
 {
     public class Game
@@ -85,7 +81,7 @@ namespace Zork.Common
                     Output.WriteLine(Player.Move(direction) ? $"You moved {direction}.\n" : "The way is shut!\n");
                     break;
                 case Commands.SCORE:
-                    Output.WriteLine($"Your score would be {Player.Score} in {Player.Moves} move(s).\n");
+                    Output.WriteLine($"Your score would be {Player.Score}, in {Player.Moves} move(s).\n");
                     break;
                 case Commands.REWARD:
                     Output.WriteLine("Score increased.\n");

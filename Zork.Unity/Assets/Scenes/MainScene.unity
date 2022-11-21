@@ -942,7 +942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.00048828125}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &946936775
@@ -963,11 +963,11 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 6
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -1911,6 +1911,8 @@ MonoBehaviour:
   TextLinePrefab: {fileID: 7356337506806558385, guid: 10f5c353f2b62e74bafbfe5c05cf9e5d, type: 3}
   NewLinePrefab: {fileID: 1581758279585189916, guid: 5a3ced3baddd62a4f8ab674fac5ba982, type: 3}
   ContentTransform: {fileID: 946936774}
+  ScrollBar: {fileID: 1322392926}
+  MaxEntries: 60
 --- !u!114 &2013327209
 MonoBehaviour:
   m_ObjectHideFlags: 0
