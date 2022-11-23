@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class UnityOutputService : MonoBehaviour, IOutputService
 {
@@ -35,7 +36,7 @@ public class UnityOutputService : MonoBehaviour, IOutputService
     {
         if(_entries.Count >= MaxEntries)
         {
-            _entries.Dequeue();
+            Destroy(_entries.Dequeue());
         }
         var textLine = Instantiate(TextLinePrefab, ContentTransform);
         textLine.text = message;
